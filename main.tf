@@ -40,10 +40,10 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_container_registry" "acr" {
-name                     = "containerRegistry18765456789"
-resource_group_name      = azurerm_resource_group.rg.name
-location                 = azurerm_resource_group.rg.location
-sku                      = "basic"
-admin_enabled            = false
-#georeplication_locations = ["West Europe"]
+  name                = "containerRegistry5434565431"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  sku                 = "Basic"
+  admin_enabled       = false
 }
+
