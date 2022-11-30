@@ -26,7 +26,7 @@ provider "azurerm" {
 
 # Create a resource group
   resource "azurerm_resource_group" "rg" {
-  name     = "demo-rg"
+  name     = "azure-terraform-rg"
   location = "West Europe"
   tags =  {
   env = "dev"
