@@ -41,8 +41,9 @@ resource "azurerm_resource_group" "example" {
 
 resource "azurerm_container_registry" "acr" {
 **name                     = "containerRegistry1"**
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
-  sku                 = "basic"
-  admin_enabled       = false
- }
+resource_group_name      = azurerm_resource_group.rg.name
+location                 = azurerm_resource_group.rg.location
+sku                      = "basic"
+admin_enabled            = false
+#georeplication_locations = ["West Europe"]
+}
