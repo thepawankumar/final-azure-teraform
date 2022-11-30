@@ -25,19 +25,15 @@ provider "azurerm" {
 
 
 # Create a resource group
-#resource "azurerm_resource_group" "rg" {
- # name     = "demo-rg"
-  #location = "West Europe"
-  #tags =  {
-   # env = "dev"
-    #cost = "TA102AXY"
-  #}
-#}
-
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
+  resource "azurerm_resource_group" "rg" {
+  name     = "demo-rg"
   location = "West Europe"
+  tags =  {
+  env = "dev"
+  cost = "TA102AXY"
+  }
 }
+
 
 resource "azurerm_container_registry" "acr" {
   name                = "containerRegistry5434565431"
