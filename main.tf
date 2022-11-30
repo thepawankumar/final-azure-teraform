@@ -43,7 +43,7 @@ resource "azurerm_container_registry" "acr" {
   name                = "containerRegistry1"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
-  sku                 = "basic"
+  sku                 = "Premium"
   admin_enabled       = false
   georeplications {
     location                = "East US"
@@ -56,4 +56,3 @@ resource "azurerm_container_registry" "acr" {
     tags                    = {}
   }
 }
-
