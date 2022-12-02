@@ -5,6 +5,7 @@ terraform {
       version = "=2.46.0"
     }
   }
+}
 
 resource "azurerm_resource_group" "acr_resource_group" {
   name     = "${var.name}-rg"
