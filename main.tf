@@ -1,45 +1,41 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=2.46.0"
+resource "azurerm_resource_group" "rg"  {
+  name     = "example-resources"
+   location = "West Europe"
+}
+
+resource  "azurerm_container_registry" "acr" {
+   name                     =  "containerRegistry1"
+   resource_group_name      =  azurerm_resource_group.rg.name
+   location                 =  azurerm_resource_group.rg.location
+  sku                       = "Standard"
+   admin_enabled            = true
+}
+
+resource  "azurerm_azuread_application" "acr-app"  {
+  name = "acr-app"
+}
+
+resource  "azurerm_azuread_service_principal"  "acr-sp" {
+  application_id =  "${azurerm_azuread_application.acr-app.application_id}"
+}
+
+resource  "azurerm_azuread_service_principal_password"  "acr-sp-pass" {
+  service_principal_id =  "${azurerm_azuread_service_principal.acr-sp.id}"
+   value                = "Password12345"
+   end_date             =  "2024-01-01T01:02:03Z"
+}
+
+resource  "azurerm_role_assignment"  "acr-assignment" {
+  scope                 =  "${azurerm_container_registry.acr.id}"
+   role_definition_name = "Contributor"
+   principal_id         =  "${azurerm_azuread_service_principal_password.acr-sp-pass.service_principal_id}"
+}
+
+    resource "null_resource" "docker_push"  {
+      provisioner "local-exec" {
+       command = <<-EOT
+        docker  login  ${azurerm_container_registry.acr.login_server}  
+        docker push  ${azurerm_container_registry.acr.login_server}
+       EOT
+      }
     }
-  }
-
-# backend "azurerm" {
- #   resource_group_name  = "friday-demo-rg"
-  #  storage_account_name = "sttfstatemgt01"
-   # container_name       = "tfstate"
-   # key                  = "demo.terraform.tfstate"
- # }
- }
-
-# Configure the Microsoft Azure Provider
-provider "azurerm" {
-  features {}
-  # subscription_id = var.subscription_id
-  # client_id       = var.client_id
-  # client_secret   = var.client_secret
-  # tenant_id       = var.tenant_id
-}
-
-
-# Create a resource group
-  resource "azurerm_resource_group" "rg" {
-  name     = "rg"
-  location = "West Europe"
-  tags =  {
-  env = "dev"
-  cost = "TA102AXY"
-  }
-}
-
-
-resource "azurerm_container_registry" "acr" {
-  name                = "containerRegistry543456"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sku                 = "Basic"
-  admin_enabled       = true
-}
-
